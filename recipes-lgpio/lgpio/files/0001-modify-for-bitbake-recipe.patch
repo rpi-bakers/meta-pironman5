@@ -1,0 +1,90 @@
+From b47fe447b3b20ae877ef4762d40353d690afa732 Mon Sep 17 00:00:00 2001
+From: Satoshi Teshiba <teshiba.satoshi@gmail.com>
+Date: Tue, 23 Sep 2025 19:37:45 +0900
+Subject: [PATCH] modify for bitbake recipe
+
+	PY_LGPIO and PY_RGPIO were extracted to each other recipes
+---
+ Makefile | 33 ++++++---------------------------
+ 1 file changed, 6 insertions(+), 27 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 44c3a56..79bb7f1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,13 +2,11 @@
+ # Set CROSS_PREFIX to prepend to all compiler tools at once for easier
+ # cross-compilation.
+ CROSS_PREFIX =
+-CC           = $(CROSS_PREFIX)gcc
+-AR           = $(CROSS_PREFIX)ar
+-RANLIB       = $(CROSS_PREFIX)ranlib
+-SIZE         = $(CROSS_PREFIX)size
+-STRIP        = $(CROSS_PREFIX)strip
+-SHLIB        = $(CC) -shared
+-STRIPLIB     = $(STRIP) --strip-unneeded
++CC           ?= $(CROSS_PREFIX)gcc
++AR           ?= $(CROSS_PREFIX)ar
++RANLIB       ?= $(CROSS_PREFIX)ranlib
++SIZE         ?= $(CROSS_PREFIX)size
++SHLIB        ?= $(CC) -shared
+ 
+ SOVERSION    = 1
+ 
+@@ -89,11 +87,9 @@ rgpio.o: rgpio.c lgpio.h lgCmd.h rgpio.h
+ 
+ rgpiod:	rgpiod.o $(OBJ_RGPIOD) $(LIB_LGPIO)
+ 	$(CC) $(LDFLAGS) -o rgpiod rgpiod.o $(OBJ_RGPIOD) $(LINK_LGPIO)
+-	$(STRIP) rgpiod
+ 
+ rgs:	rgs.o $(OBJ_RGS)
+ 	$(CC) $(LDFLAGS) -o rgs rgs.o $(OBJ_RGS)
+-	$(STRIP) rgs
+ 
+ DOC/.docs: $(DOCS)
+ 	@[ -d "DOC" ] && cd DOC && ./cdoc || echo "*** No DOC directory ***"
+@@ -107,7 +103,7 @@ ifeq ($(DESTDIR),)
+   PYINSTALLARGS =
+ else
+   PYBUILDARGS = --include-dirs=$(DESTDIR)$(includedir) --library-dirs=$(DESTDIR)$(libdir)
+-  PYINSTALLARGS = --root=$(DESTDIR)
++  PYINSTALLARGS = --prefix=$(DESTDIR)
+ endif
+ 
+ html: $(ALL)
+@@ -134,21 +130,6 @@ install: $(ALL)
+ ifeq ($(DESTDIR),)
+ 	ldconfig
+ endif
+-	@if which python2; then cd PY_RGPIO && python2 setup.py -q install $(PYINSTALLARGS) || echo "*** install of Python2 rgpio.py failed ***"; fi
+-	@if which python3; then cd PY_RGPIO && python3 setup.py -q install $(PYINSTALLARGS) || echo "*** install of Python3 rgpio.py failed ***"; fi
+-	@if which swig; then cd PY_LGPIO && swig -python lgpio.i || echo "*** need swig package to install lgpio.py ***"; fi
+-	@if which swig python2; then \
+-		cd PY_LGPIO && \
+-		python2 setup.py build_ext $(PYBUILDARGS) && \
+-		python2 setup.py -q install $(PYINSTALLARGS) || \
+-		echo "*** install of Python2 lgpio.py failed ***"; \
+-	fi
+-	@if which swig python3; then \
+-		cd PY_LGPIO && \
+-		python3 setup.py build_ext $(PYBUILDARGS) && \
+-		python3 setup.py -q install $(PYINSTALLARGS) || \
+-		echo "*** install of Python3 lgpio.py failed ***"; \
+-	fi
+ 
+ uninstall:
+ 	rm -f $(DESTDIR)$(includedir)/lgpio.h
+@@ -170,13 +151,11 @@ endif
+ $(LIB_LGPIO):	$(OBJ_LGPIO)
+ 	$(SHLIB) -pthread $(LDFLAGS) -Wl,-soname,$(LIB_LGPIO).$(SOVERSION) -o $(LIB_LGPIO).$(SOVERSION) $(OBJ_LGPIO)
+ 	ln -fs $(LIB_LGPIO).$(SOVERSION) $(LIB_LGPIO)
+-	$(STRIPLIB) $(LIB_LGPIO)
+ 	$(SIZE)     $(LIB_LGPIO)
+ 
+ $(LIB_RGPIO):	$(OBJ_RGPIO)
+ 	$(SHLIB) -pthread $(LDFLAGS) -Wl,-soname,$(LIB_RGPIO).$(SOVERSION) -o $(LIB_RGPIO).$(SOVERSION) $(OBJ_RGPIO)
+ 	ln -fs $(LIB_RGPIO).$(SOVERSION) $(LIB_RGPIO)
+-	$(STRIPLIB) $(LIB_RGPIO)
+ 	$(SIZE)     $(LIB_RGPIO)
+ 
+ # generated using gcc -MM *.c

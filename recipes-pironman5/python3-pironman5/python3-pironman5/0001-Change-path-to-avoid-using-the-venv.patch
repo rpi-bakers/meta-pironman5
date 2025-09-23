@@ -1,0 +1,58 @@
+From 5f68cf96ad6a2ca16632c8cfb670b56ceb2c6c6c Mon Sep 17 00:00:00 2001
+From: Satoshi Teshiba <teshiba.satoshi@gmail.com>
+Date: Mon, 22 Sep 2025 16:01:09 +0900
+Subject: [PATCH] Change path to avoid using the venv
+
+---
+ .gitignore            | 5 ++++-
+ bin/pironman5         | 6 +++---
+ bin/pironman5.service | 4 ++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/.gitignore b/.gitignore
+index 600d2d3..db7fb99 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1 +1,4 @@
+-.vscode
+\ No newline at end of file
++.vscode
++build/
++pironman5.egg-info/
++
+diff --git a/bin/pironman5 b/bin/pironman5
+index bc0dd95..25ceb86 100644
+--- a/bin/pironman5
++++ b/bin/pironman5
+@@ -17,13 +17,13 @@ for arg in "${args[@]}"; do
+ done
+ 
+ if $restart_found; then
+-    /opt/pironman5/venv/bin/pironman5-service stop
++    /usr/bin/pironman5-service stop
+     sleep 5
+ fi
+ 
+ if $background_found; then
+-    /opt/pironman5/venv/bin/pironman5-service "${new_args[@]}" 2>&1 1>/dev/null &
++    /usr/bin/pironman5-service "${new_args[@]}" 1>/dev/null 2>&1 &
+ else
+-    /opt/pironman5/venv/bin/pironman5-service "${new_args[@]}"
++    /usr/bin/pironman5-service "${new_args[@]}"
+ fi
+ 
+diff --git a/bin/pironman5.service b/bin/pironman5.service
+index 117c727..6b38664 100644
+--- a/bin/pironman5.service
++++ b/bin/pironman5.service
+@@ -7,8 +7,8 @@ After=multi-user.target
+ [Service]
+ Type=forking
+ # WorkingDirectory=/opt/pironman5
+-ExecStart=/usr/local/bin/pironman5 start --background
+-# ExecStop=/usr/local/bin/pironman5 stop
++ExecStart=/usr/bin/pironman5 start --background
++# ExecStop=/usr/bin/pironman5 stop
+ # PrivateTmp=False
+ 
+ [Install]
