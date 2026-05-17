@@ -1,0 +1,1 @@
+pironman5 ALL=(ALL) NOPASSWD: /usr/sbin/shutdown, /usr/sbin/reboot, /usr/sbin/poweroff, /usr/sbin/halt, /usr/bin/systemctl, /usr/bin/lsblk
