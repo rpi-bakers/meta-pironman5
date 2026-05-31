@@ -1,6 +1,8 @@
 
 require conf/distro/rpi-build.conf
 
+BBMASK += "/meta-raspberrypi/dynamic-layers/multimedia-layer/recipes-multimedia/libcamera/libcamera_.*\.bbappend"
+
 # pironman5 specific settings
 ENABLE_UART = "1"
 ENABLE_SPI_BUS = "1"

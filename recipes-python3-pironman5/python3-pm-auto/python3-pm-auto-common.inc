@@ -18,6 +18,7 @@ COMPATIBLE_MACHINE = "(raspberrypi3|raspberrypi5)"
 RDEPENDS:${PN} += " \
     python3-pillow \
     python3-adafruit-circuitpython-neopixel-spi \
+    python3-evdev \
     python3-gpiod \
     python3-gpiozero \
     python3-influxdb \
