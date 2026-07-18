@@ -9,11 +9,11 @@ LIC_FILES_CHKSUM = "\
     file://LICENSES/LGPL-2.1-or-later.txt;md5=2a4f4fd2128ea2f65047ee63fbca9f68 \
 "
 
-SRC_URI = " \
-    git://git.libcamera.org/libcamera/libcamera.git;protocol=https;branch=master \
-        file://0001-libcamera-Do-not-assume-libc-with-clang.patch \
-        file://0001-fix-MediaEntity-names.patch \
-"
+SRC_URI = "git://git.libcamera.org/libcamera/libcamera.git;protocol=https;branch=master \
+           file://0001-libcamera-Do-not-assume-libc-with-clang.patch \
+           file://0001-fix-MediaEntity-names.patch \
+           file://0002-fix-build-error.patch \
+           "
 
 SRCREV = "3c17d1fbb2bd93f221afee788ebf0d7394032e4d"
 

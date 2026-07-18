@@ -1,0 +1,36 @@
+From 89634de4efb3d6382ad82efd69f47934a7e1c68c Mon Sep 17 00:00:00 2001
+From: Satoshi Teshiba <teshiba.satoshi@gmail.com>
+Date: Tue, 14 Jul 2026 14:29:25 +0000
+Subject: [PATCH] fix build error
+
+---
+ src/libcamera/pipeline/rpi/pisp/pisp.cpp | 2 +-
+ src/libcamera/pipeline/rpi/vc4/vc4.cpp   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/libcamera/pipeline/rpi/pisp/pisp.cpp b/src/libcamera/pipeline/rpi/pisp/pisp.cpp
+index a3292cd1..c67938b0 100644
+--- a/src/libcamera/pipeline/rpi/pisp/pisp.cpp
++++ b/src/libcamera/pipeline/rpi/pisp/pisp.cpp
+@@ -1794,7 +1794,7 @@ void PiSPCameraData::beInputDequeue(FrameBuffer *buffer)
+ void PiSPCameraData::beOutputDequeue(FrameBuffer *buffer)
+ {
+ 	RPi::Stream *stream = nullptr;
+-	int index;
++	int index = 0;
+ 
+ 	if (!isRunning())
+ 		return;
+diff --git a/src/libcamera/pipeline/rpi/vc4/vc4.cpp b/src/libcamera/pipeline/rpi/vc4/vc4.cpp
+index f0cb99d5..0518c71f 100644
+--- a/src/libcamera/pipeline/rpi/vc4/vc4.cpp
++++ b/src/libcamera/pipeline/rpi/vc4/vc4.cpp
+@@ -750,7 +750,7 @@ void Vc4CameraData::platformStop()
+ void Vc4CameraData::unicamBufferDequeue(FrameBuffer *buffer)
+ {
+ 	RPi::Stream *stream = nullptr;
+-	unsigned int index;
++	unsigned int index = 0;
+ 
+ 	if (!isRunning())
+ 		return;

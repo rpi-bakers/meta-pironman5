@@ -1,15 +1,15 @@
-From 892c50234423d46c361f65c9979ac7266172f99e Mon Sep 17 00:00:00 2001
+From 6c10a37dfdc77502df345c62c4b2ac793b46f597 Mon Sep 17 00:00:00 2001
 From: Satoshi Teshiba <teshiba.satoshi@gmail.com>
 Date: Sun, 14 Jun 2026 14:27:51 +0900
-Subject: [PATCH] fix MediaEntity names
+Subject: [PATCH] fix MediaEntity names and pad No.
 
 Upstream-Status: Pending
 ---
- src/libcamera/pipeline/rpi/pisp/pisp.cpp | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ src/libcamera/pipeline/rpi/pisp/pisp.cpp | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/src/libcamera/pipeline/rpi/pisp/pisp.cpp b/src/libcamera/pipeline/rpi/pisp/pisp.cpp
-index 77acd2f6..cce0cc2b 100644
+index 77acd2f6..a3292cd1 100644
 --- a/src/libcamera/pipeline/rpi/pisp/pisp.cpp
 +++ b/src/libcamera/pipeline/rpi/pisp/pisp.cpp
 @@ -882,9 +882,9 @@ bool PipelineHandlerPiSP::match(DeviceEnumerator *enumerator)
@@ -40,6 +40,14 @@ index 77acd2f6..cce0cc2b 100644
  	MediaEntity *ispInput = isp->getEntityByName("pispbe-input");
  	MediaEntity *IpaPrepare = isp->getEntityByName("pispbe-config");
  	MediaEntity *ispOutput0 = isp->getEntityByName("pispbe-output0");
--- 
-2.43.0
-
+@@ -2158,8 +2158,8 @@ int PiSPCameraData::configureEntities(V4L2SubdeviceFormat sensorFormat,
+ 	int ret = 0;
+ 
+ 	constexpr unsigned int csiVideoSinkPad = 0;
+-	constexpr unsigned int csiVideoSourcePad = 1;
+-	constexpr unsigned int csiMetaSourcePad = 2;
++	constexpr unsigned int csiVideoSourcePad = 4;
++	constexpr unsigned int csiMetaSourcePad = 5;
+ 
+ 	constexpr unsigned int feVideoSinkPad = 0;
+ 	constexpr unsigned int feConfigSinkPad = 1;
